@@ -1,45 +1,47 @@
-import os
-import random
 import discord
 from discord import app_commands
-from flask import Flask
-import threading
+import random
+import os
 
-# ==========================
-# 🔹 Flask（ダミーWebサーバー）
-# ==========================
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return "Bot is running on Render!"
-
-def run():
-    port = int(os.getenv("PORT", 8080))  # RenderがPORTを指定してくる
-    app.run(host="0.0.0.0", port=port)
-
-# ==========================
-# 🔹 Discord Botの設定
-# ==========================
+# Intents設定
 intents = discord.Intents.default()
 bot = discord.Client(intents=intents)
 tree = app_commands.CommandTree(bot)
 
-HIRAGANA = [chr(i) for i in range(ord('あ'), ord('ん') + 1)] + ['?', '!']
+# ひらがな一覧
+HIRAGANA = [chr(i) for i in range(ord('あ'), ord('ん') + 1)] + ['ー', 'っ', 'ゃ', 'ゅ', 'ょ']
+
+# 英小文字一覧
+ALPHABETS = [chr(i) for i in range(ord('a'), ord('z') + 1)]
 
 @bot.event
 async def on_ready():
-    await tree.sync()  # スラッシュコマンドをサーバーに同期
-    print(f"✅ ログインしました: {bot.user}")
+    await tree.sync()
+    print(f"ログインしました: {bot.user}")
 
+# ひらがな3文字
 @tree.command(name="ひらがな", description="ランダムなひらがな3文字を送信します")
-async def hiragana(interaction: discord.Interaction):
+async def hiragana3(interaction: discord.Interaction):
     result = ''.join(random.choice(HIRAGANA) for _ in range(3))
     await interaction.response.send_message(result)
 
-# ==========================
-# 🔹 FlaskとBotを同時に起動
-# ==========================
-if __name__ == "__main__":
-    threading.Thread(target=run).start()  # Flaskを別スレッドで起動
-    bot.run(os.environ["DISCORD_TOKEN"])
+# ひらがな4文字
+@tree.command(name="ひらがな4", description="ランダムなひらがな4文字を送信します")
+async def hiragana4(interaction: discord.Interaction):
+    result = ''.join(random.choice(HIRAGANA) for _ in range(4))
+    await interaction.response.send_message(result)
+
+# アルファベット3文字
+@tree.command(name="abc3", description="ランダムな英小文字3文字を送信します")
+async def abc3(interaction: discord.Interaction):
+    result = ''.join(random.choice(ALPHABETS) for _ in range(3))
+    await interaction.response.send_message(result)
+
+# アルファベット4文字
+@tree.command(name="abc4", description="ランダムな英小文字4文字を送信します")
+async def abc4(interaction: discord.Interaction):
+    result = ''.join(random.choice(ALPHABETS) for _ in range(4))
+    await interaction.response.send_message(result)
+
+# Bot起動
+bot.run(os.environ["DISCORD_TOKEN"])
