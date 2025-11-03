@@ -24,8 +24,8 @@ intents = discord.Intents.default()
 bot = discord.Client(intents=intents)
 tree = app_commands.CommandTree(bot)
 
-HIRAGANA = [chr(i) for i in range(ord('あ'), ord('ん') + 1)] + ['ー', 'っ', 'ゃ', 'ゅ', 'ょ', 'ゎ', '!', '?']
-ALPHABETS = [chr(i) for i in range(ord('a'), ord('z') + 1)] + ['!', '?']
+HIRAGANA = [chr(i) for i in range(ord('あ'), ord('ん') + 1)] + ['ー', '!', '?', '。', '、']
+ALPHABETS = [chr(i) for i in range(ord('a'), ord('z') + 1)] + ['!', '?', '.']
 
 @bot.event
 async def on_ready():
