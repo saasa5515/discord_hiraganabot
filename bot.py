@@ -32,7 +32,7 @@ async def on_ready():
     await tree.sync()
     print(f"ログインしました: {bot.user}")
 
-@tree.command(name="ひらがな", description="ランダムなひらがな3文字を送信します")
+@tree.command(name="ひらがな3", description="ランダムなひらがな3文字を送信します")
 async def hiragana3(interaction: discord.Interaction):
     result = ''.join(random.choice(HIRAGANA) for _ in range(3))
     await interaction.response.send_message(result)
